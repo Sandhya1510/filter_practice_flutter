@@ -33,12 +33,37 @@ class _FilterScreenState extends State<FilterScreen> {
 
   final List<String> categories = ["Smartphones", "Laptops", "Fragrances"];     //(Available options)
 
-  Future<void> fetchBrands() async {                      //(Calls the API when a category is selected.)
-    if (selectedCategory == null) return;
+  // Future<void> fetchBrands() async {                      //(Calls the API when a category is selected.)
+  //   if (selectedCategory == null) return;
+  //
+  //   final response = await http.get(
+  //     Uri.parse("https://dummyjson.com/products/category/${selectedCategory!.toLowerCase()}"),
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> products = jsonDecode(response.body)["products"];
+  //
+  //     Set<String> brandSet = products.map<String>((product) => product["brand"] as String).toSet();
+  //
+  //     setState(() {
+  //       brands = brandSet.toList();
+  //       selectedBrand = null;
+  //     });
+  //   } else {
+  //     throw Exception("Failed to fetch brands");
+  //   }
+  // }
 
-    final response = await http.get(
-      Uri.parse("https://dummyjson.com/products/category/${selectedCategory!.toLowerCase()}"),
-    );
+  Future<void> fetchBrands() async {
+    String url;
+
+    if (selectedCategory == null) {
+      url = "https://dummyjson.com/products";
+    } else {
+      url = "https://dummyjson.com/products/category/${selectedCategory!.toLowerCase()}";
+    }
+
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       List<dynamic> products = jsonDecode(response.body)["products"];
@@ -53,6 +78,7 @@ class _FilterScreenState extends State<FilterScreen> {
       throw Exception("Failed to fetch brands");
     }
   }
+
 
   // Future<void> fetchData() async {                  //(Fetches products from the selected category.)
   //   if (selectedCategory == null && selectedBrand == null) {
